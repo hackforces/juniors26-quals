@@ -1,0 +1,8 @@
+services:
+  challenge:
+    build: .
+    environment:
+      CTF_FLAG: ${CTF_FLAG:?Set CTF_FLAG before starting}
+      PORT: "8080"
+    ports:
+      - "127.0.0.1:${PORT:-13429}:8080"

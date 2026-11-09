@@ -1,0 +1,9 @@
+name: screenshot
+
+services:
+  challenge:
+    build: .
+    environment:
+      CTF_FLAG: ${CTF_FLAG:?Set CTF_FLAG before starting}
+    ports:
+      - "127.0.0.1:${PORT:-13446}:7777"   # nc: замок микроволновки, выдаёт флаг за код с экрана

@@ -1,0 +1,13 @@
+services:
+  challenge:
+    build:
+      context: .
+      args:
+        SEED: ${SEED:-}   # опционально: другой инстанс задачи (S-box/константы)
+    environment:
+      CTF_FLAG: ${CTF_FLAG:?Set CTF_FLAG before starting}
+      TIME_LIMIT: ${TIME_LIMIT:-20}
+      ROUNDS: ${ROUNDS:-1}
+    ports:
+      - "127.0.0.1:${PORT:-13403}:8000"   # отдача хэндаута (http)
+      - "127.0.0.1:${PORT_NC:-13404}:1337" # интерактивный челлендж (nc)

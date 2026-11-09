@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+[ "$#" -eq 0 ] || { echo "interactive desk only"; exit 1; }
+echo "Red League maintenance terminal. Type help."
+while printf 'desk> '; IFS= read -r line; do
+  case "$line" in
+    help) echo "available: help, ss, cat, nc, exit" ;;
+    ss) /usr/bin/ss -lnt ;;
+    'cat /etc/red/card') /bin/cat /etc/red/card ;;
+    'nc 127.0.0.1 4587') /bin/nc -w 20 127.0.0.1 4587 ;;
+    exit) exit 0 ;;
+    help\ *|ss\ *|cat|cat\ *|nc|nc\ *|exit\ *) echo "argument is not available" ;;
+    '') ;;
+    *) echo "command not available" ;;
+  esac
+done

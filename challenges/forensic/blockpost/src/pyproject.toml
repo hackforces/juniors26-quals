@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mc_blockpost"
+version = "1.0.0"
+description = "Forensics CTF «Blockpost»: флаг блоками в зашифрованной сессии Minecraft (Java 26.3, protocol 777)"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7", "scapy>=2.5"]
+fast = ["cryptography>=42"]   # необязательно: AES/CFB8 быстрее, результат тот же
+
+[project.scripts]
+mc-blockpost = "mc_blockpost.cli:main"
+blockpost-gen = "mc_blockpost.cli:gen_main"
+blockpost-solve = "mc_blockpost.cli:solve_main"
+
+[tool.setuptools]
+packages = ["mc_blockpost"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

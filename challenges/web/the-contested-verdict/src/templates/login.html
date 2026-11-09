@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Вердикт 2050 · Вход</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 360px; margin: 80px auto; padding: 0 16px; color: #1a1a1a; }
+    label { display: block; margin-top: 12px; font-size: 14px; }
+    input { width: 100%; box-sizing: border-box; padding: 8px; font-size: 15px; margin-top: 4px; }
+    button { margin-top: 16px; padding: 8px 20px; font-size: 15px; cursor: pointer; }
+    .err { color: #c5221f; margin-top: 12px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <h1>Вход</h1>
+  <form method="post" action="{{ url_for('login') }}">
+    <label>Логин
+      <input type="text" name="login" autofocus>
+    </label>
+    <label>Пароль
+      <input type="password" name="password">
+    </label>
+    <button type="submit">Войти</button>
+  </form>
+  {% if error %}
+    <p class="err">{{ error }}</p>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }} · Лавка предсказаний</title>
+  <link href="/static/vendor/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/css/app.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom border-secondary-subtle">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/">🔮 Лавка предсказаний</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" href="/play">Играть</a></li>
+        <li class="nav-item"><a class="nav-link" href="/shop">Магазин</a></li>
+        <li class="nav-item"><a class="nav-link" href="/leaderboard">Лидеры</a></li>
+      </ul>
+      <ul class="navbar-nav" id="auth-nav">
+        <li class="nav-item" data-auth="out"><a class="nav-link" href="/login">Вход</a></li>
+        <li class="nav-item" data-auth="out"><a class="nav-link" href="/register">Регистрация</a></li>
+        <li class="nav-item" data-auth="in"><span class="nav-link" id="nav-user"></span></li>
+        <li class="nav-item" data-auth="in"><a class="nav-link" href="#" id="logout">Выйти</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="container py-4">
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="container py-4 text-secondary small">
+  Лавка предсказаний · ответь на {{ num_questions }} вопроса про блокировки и трать очки в магазине.
+</footer>
+
+<script src="/static/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

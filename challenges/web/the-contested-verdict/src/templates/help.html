@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Вердикт 2050 · Справка по Lua</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 820px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; line-height: 1.5; }
+    nav a { margin-right: 16px; }
+    pre { background: #111; color: #e6e6e6; padding: 12px; border-radius: 6px; overflow-x: auto; }
+    code { background: #f0f0f0; padding: 1px 5px; border-radius: 4px; }
+    h2 { border-bottom: 1px solid #e0e0e0; padding-bottom: 4px; margin-top: 32px; }
+    table { border-collapse: collapse; margin-top: 8px; }
+    th, td { border: 1px solid #ccc; padding: 4px 10px; text-align: left; }
+  </style>
+</head>
+<body>
+  <nav><a href="/">Задача</a><a href="/help">Справка по Lua</a><a href="/logout">Выход</a></nav>
+  <h1>Краткая справка по синтаксису Lua</h1>
+
+  <h2>Комментарии</h2>
+  <pre>-- однострочный комментарий
+--[[ многострочный
+     комментарий ]]</pre>
+
+  <h2>Переменные и типы</h2>
+  <p>Переменные по умолчанию глобальные; <code>local</code> делает их локальными.
+     Типы: <code>nil</code>, <code>boolean</code>, <code>number</code>,
+     <code>string</code>, <code>table</code>, <code>function</code>.</p>
+  <pre>local x = 10
+local name = "Lua"
+local pi = 3.14
+local ok = true
+local nothing = nil</pre>
+
+  <h2>Числа и строки</h2>
+  <pre>local n = tonumber("42")      -- строка -> число
+local s = tostring(42)        -- число -> строка
+local joined = "a" .. "b"     -- конкатенация строк: "ab"
+local len = #"hello"          -- длина: 5
+print(string.sub("hello", 1, 3))  -- "hel"
+print(string.format("%.2f", pi))  -- "3.14"</pre>
+
+  <h2>Операторы</h2>
+  <table>
+    <tr><th>Категория</th><th>Операторы</th></tr>
+    <tr><td>Арифметика</td><td><code>+ - * / % ^</code></td></tr>
+    <tr><td>Сравнение</td><td><code>== ~= &lt; &gt; &lt;= &gt;=</code></td></tr>
+    <tr><td>Логические</td><td><code>and or not</code></td></tr>
+    <tr><td>Конкатенация</td><td><code>..</code></td></tr>
+    <tr><td>Длина</td><td><code>#</code></td></tr>
+  </table>
+  <p>Неравенство — это <code>~=</code>, а не <code>!=</code>.</p>
+
+  <h2>Условия</h2>
+  <pre>if x &gt; 0 then
+  print("positive")
+elseif x == 0 then
+  print("zero")
+else
+  print("negative")
+end</pre>
+
+  <h2>Циклы</h2>
+  <pre>for i = 1, 5 do          -- 1..5 включительно
+  print(i)
+end
+
+for i = 10, 1, -2 do     -- с шагом -2
+  print(i)
+end
+
+local j = 0
+while j &lt; 3 do
+  j = j + 1
+end
+
+repeat
+  j = j - 1
+until j == 0</pre>
+
+  <h2>Функции</h2>
+  <pre>local function add(a, b)
+  return a + b
+end
+
+print(add(2, 3))         -- 5
+
+-- несколько возвращаемых значений
+local function minmax(a, b)
+  if a &lt; b then return a, b else return b, a end
+end
+local lo, hi = minmax(5, 2)</pre>
+
+  <h2>Таблицы</h2>
+  <pre>local t = {10, 20, 30}   -- массив (индексация с 1)
+print(t[1])              -- 10
+print(#t)                -- 3
+
+local m = {name = "Lua", year = 1993}
+print(m.name)            -- "Lua"
+print(m["year"])         -- 1993
+
+for i, v in ipairs(t) do print(i, v) end
+for k, v in pairs(m) do print(k, v) end</pre>
+
+  <h2>Функция fetch (в этой задаче)</h2>
+  <p><code>fetch(url [, method [, body]])</code> — HTTP-запрос к сервису.
+     Разрешены только URL, начинающиеся с
+     <code>http://127.0.0.1</code>.</p>
+  <pre>-- GET
+local body = fetch("{{ base }}/system/data1")
+
+-- POST с телом
+fetch("{{ base }}/system/out", "POST", "21")</pre>
+</body>
+</html>

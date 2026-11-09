@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <h1 class="h3 mb-3">Вход</h1>
+    <div id="msg"></div>
+
+    <form id="login-form" class="card bg-body-tertiary border-secondary-subtle p-4">
+      <div class="mb-3">
+        <label class="form-label">Логин</label>
+        <input name="username" class="form-control" required autocomplete="username">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Пароль</label>
+        <input name="password" type="password" class="form-control" required autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary">Войти</button>
+      <p class="mt-3 mb-0 text-secondary small">Нет аккаунта? <a href="/register">Регистрация</a></p>
+    </form>
+
+    <form id="code-form" class="card bg-body-tertiary border-secondary-subtle p-4 d-none">
+      <p class="mb-3">На вашу почту отправлен код. Введите его, чтобы войти.</p>
+      <div class="mb-3">
+        <label class="form-label">Код из письма</label>
+        <input name="code" class="form-control" inputmode="numeric" maxlength="12" required autocomplete="one-time-code">
+      </div>
+      <button class="btn btn-primary">Подтвердить</button>
+      <button type="button" id="back" class="btn btn-link text-secondary">Назад</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const loginForm = document.getElementById('login-form');
+const codeForm = document.getElementById('code-form');
+let pendingUsername = null;
+
+if (new URLSearchParams(location.search).get('code') === '1') {
+  showMsg('msg', 'Аккаунт создан с email — при входе потребуется код из письма.', 'info');
+}
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const username = f.get('username');
+  try {
+    const data = await api('/api/login', 'POST', { username, password: f.get('password') });
+    if (data.access_token) {
+      setToken(data.access_token);
+      location.href = '/play';
+    } else {
+      // Email account -> show the code step.
+      pendingUsername = username;
+      loginForm.classList.add('d-none');
+      codeForm.classList.remove('d-none');
+      showMsg('msg', 'Введите код из письма.', 'info');
+    }
+  } catch (err) { showMsg('msg', err.message, 'danger'); }
+});
+
+codeForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  try {
+    const data = await api('/api/verify_code', 'POST', { username: pendingUsername, code: f.get('code') });
+    setToken(data.access_token);
+    location.href = '/play';
+  } catch (err) { showMsg('msg', err.message, 'danger'); }
+});
+
+document.getElementById('back').addEventListener('click', () => {
+  codeForm.classList.add('d-none');
+  loginForm.classList.remove('d-none');
+  document.getElementById('msg').innerHTML = '';
+});
+</script>
+{% endblock %}

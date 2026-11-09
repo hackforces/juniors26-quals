@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Вердикт 2050 · Задача A. Среднее</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 820px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; }
+    nav a { margin-right: 16px; }
+    textarea { width: 100%; box-sizing: border-box; font-family: ui-monospace, monospace; font-size: 14px; }
+    pre { background: #111; color: #0f0; padding: 12px; border-radius: 6px; white-space: pre-wrap; word-break: break-word; }
+    button { padding: 8px 20px; font-size: 15px; cursor: pointer; margin-top: 8px; }
+    code { background: #f0f0f0; padding: 1px 5px; border-radius: 4px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 8px; font-size: 14px; }
+    th, td { border: 1px solid #ccc; padding: 4px 8px; text-align: left; }
+    .ok { color: #137333; font-weight: 600; }
+    .bad { color: #c5221f; font-weight: 600; }
+    .box { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; }
+    .hint { color: #666; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <nav><a href="/">Задача</a><a href="/help">Справка по Lua</a><a href="/logout">Выход</a></nav>
+  <h1>Задача A. Среднее двух чисел</h1>
+  <small class="hint">Жюри уверяет, что флаг прячется в служебных заголовках исходящих запросов системы.</small>
+
+  <div class="box">
+    <p>Сервис хранит два числа. Напишите решение на <b>Lua</b>, которое:</p>
+    <ol>
+      <li>получит <code>data1</code> с <code>{{ base }}/system/data1</code>;</li>
+      <li>получит <code>data2</code> с <code>{{ base }}/system/data2</code>;</li>
+      <li>посчитает среднее <code>(data1 + data2) / 2</code>;</li>
+      <li>отправит результат <b>POST</b>-запросом на <code>{{ base }}/system/out</code>.</li>
+    </ol>
+    <p>Доступна функция <code>fetch(url [, method [, body]])</code>. По умолчанию метод
+       <code>GET</code>. Разрешены только URL, начинающиеся с
+       <code>http://127.0.0.1</code>.</p>
+    <p>Решение проверяется на наборе тестов. Вердикт — <b>Accepted</b>, если все тесты пройдены.</p>
+  </div>
+
+  <h3>Решение</h3>
+  <form method="post" onsubmit="document.getElementById('run-note').style.display='block'; document.getElementById('submit-btn').disabled=true;">
+    <textarea name="code" rows="12">{{ code }}</textarea>
+    <br>
+    <button id="submit-btn" type="submit">Отправить на проверку</button>
+    <p class="hint">Проверка может занять до 1 минуты — это нормально.</p>
+    <p id="run-note" style="display:none; color:#1a73e8; font-weight:600;">Идёт проверка… это может занять до минуты.</p>
+  </form>
+
+  {% if verdict is not none %}
+    <h3>Результат: <span class="{{ 'ok' if verdict == 'Accepted' else 'bad' }}">{{ verdict }}</span></h3>
+    <table>
+      <tr><th>#</th><th>data1</th><th>data2</th><th>ожидалось</th><th>получено</th><th>вердикт</th></tr>
+      {% for r in rows %}
+      <tr>
+        <td>{{ r.n }}</td><td>{{ r.data1 }}</td><td>{{ r.data2 }}</td>
+        <td>{{ r.expected }}</td><td>{{ r.got }}</td>
+        <td class="{{ 'ok' if r.ok else 'bad' }}">{{ 'OK' if r.ok else 'FAIL' }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% if verdict != 'Accepted' and last_output %}
+      <h3>Вывод программы (последний тест):</h3>
+      <pre>{{ last_output }}</pre>
+    {% endif %}
+  {% endif %}
+</body>
+</html>

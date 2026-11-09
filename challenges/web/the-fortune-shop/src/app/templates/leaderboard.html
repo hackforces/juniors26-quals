@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h3 mb-3">Таблица лидеров</h1>
+<div id="msg"></div>
+<div class="table-responsive">
+  <table class="table table-dark table-striped align-middle">
+    <thead><tr><th style="width:4rem">#</th><th>Игрок</th><th class="text-end">Очки</th></tr></thead>
+    <tbody id="rows"><tr><td colspan="3" class="text-secondary">Загрузка…</td></tr></tbody>
+  </table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+(async () => {
+  try {
+    const rows = await api('/api/leaderboard', 'GET');
+    const tbody = document.getElementById('rows');
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="3" class="text-secondary">Пока пусто</td></tr>'; return; }
+    tbody.innerHTML = rows.map((r, i) =>
+      `<tr><td>${i + 1}</td><td>${escapeHtml(r.username)}</td><td class="text-end fw-bold">${r.total_score}</td></tr>`
+    ).join('');
+  } catch (err) { showMsg('msg', err.message, 'danger'); }
+})();
+</script>
+{% endblock %}

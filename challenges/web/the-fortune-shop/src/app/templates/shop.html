@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+  <h1 class="h3 mb-0">Магазин</h1>
+  <div class="fs-5">Баланс: <span id="balance" class="badge text-bg-warning">—</span></div>
+</div>
+
+<div id="msg"></div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3" id="products"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/shop.js"></script>
+{% endblock %}

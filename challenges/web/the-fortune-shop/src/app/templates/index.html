@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-5 mb-4 bg-body-tertiary rounded-3 border border-secondary-subtle">
+  <h1 class="display-5 fw-bold">Лавка предсказаний</h1>
+  <p class="fs-4 mb-3">Лавка предсказаний — крупнейший дом прогнозов.</p>
+  <p class="col-lg-9 fs-5 text-secondary">
+    Ответь на {{ num_questions }} вопроса о том, что заблокируют завтра, через неделю,
+    месяц, год — и что не заблокируют никогда. Выбор один на каждый вопрос.
+  </p>
+  <ul class="fs-6 text-secondary">
+    <li>Идеальный раунд (все {{ num_questions }} ответов верны) — 10 очков, промах — 0.</li>
+    <li>Очки — это валюта: трать их в <a href="/shop">магазине</a>.</li>
+  </ul>
+  <a href="/play" class="btn btn-primary btn-lg mt-2">Начать игру</a>
+  <a href="/shop" class="btn btn-outline-light btn-lg mt-2">В магазин</a>
+</div>
+<div class="row g-4">
+  <div class="col-md-4"><div class="card bg-body-tertiary border-secondary-subtle h-100"><div class="card-body">
+    <p class="card-text mb-0">Наш сайт не гарантирует доступность. Если наш сайт недоступен — ваши деньги безопасно лежат у нас. Они теперь не ваши.</p></div></div></div>
+  <div class="col-md-4"><div class="card bg-body-tertiary border-secondary-subtle h-100"><div class="card-body">
+    <p class="card-text mb-0">Лавка предсказаний — скажи социальным опросам 我不喜歡調查。</p></div></div></div>
+  <div class="col-md-4"><div class="card bg-body-tertiary border-secondary-subtle h-100"><div class="card-body">
+    <p class="card-text mb-0">Нет, мы не сделали наш сайт в китае. Хотя…?</p></div></div></div>
+</div>
+{% endblock %}

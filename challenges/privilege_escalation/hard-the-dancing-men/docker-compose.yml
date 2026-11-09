@@ -1,0 +1,9 @@
+services:
+  challenge:
+    build: .
+    environment:
+      CTF_FLAG: ${CTF_FLAG:?Set CTF_FLAG before starting}
+    ports: ["127.0.0.1:${PORT:-13423}:22"]
+    pids_limit: 30
+    mem_limit: 256m
+    cpus: 0.5

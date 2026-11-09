@@ -1,0 +1,40 @@
+.DS_Store
+
+# Local tooling and credentials
+.ctf/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.env
+
+# Personal dynamic target output — never commit a participant-specific artifact.
+runtime/
+**/runtime/
+**/generated/
+**/dist/
+*.log
+*.pid
+*.pcap
+*.pcapng
+*.tar
+*.tar.gz
+*.zip
+# исключение: статический ПЭМИН-хэндаут medium-screenshot хранится в репо через git lfs
+!challenges/forensic/medium-screenshot/public/*.zip
+*.7z
+*.wav
+*.ppm
+*.png
+*.jpg
+*.jpeg
+*.sqlite
+*.db
+*.dump
+
+# Локальные артефакты сборки mini-vm (генерируются gen_vm.py/clang, в docker тоже)
+challenges/reverse/mini-vm/minivm
+challenges/reverse/mini-vm/src/vm_blob.h
+
+# Публичные хэндауты задач (раздаются игрокам как есть)
+!challenges/*/*/attachments/*-files.zip

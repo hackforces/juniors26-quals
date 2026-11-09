@@ -1,0 +1,9 @@
+services:
+  challenge:
+    build: .
+    platform: linux/amd64  # солвер рассчитан на x86-64 layout attachments/sign
+    environment:
+      CTF_FLAG: ${CTF_FLAG:?Set CTF_FLAG before starting}
+    ports:
+      - "127.0.0.1:${PORT:-13427}:31337"      # nc — интерактивный челлендж
+      - "127.0.0.1:${PORT_HTTP:-13441}:31338" # http — GET /medium-the-sign-of-four-files.zip

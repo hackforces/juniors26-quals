@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Профиль — Bonus Club</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f1216'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23f6b942' font-family='Arial' font-weight='bold'%3EB%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Bonus<span>Club</span></div>
+    <div id="userbox" class="userbox hidden">
+      <button id="avatarBadge" class="avatar-badge" type="button">🙂</button>
+      <span id="who" class="who"></span>
+      <span id="balance" class="pill">— pt</span>
+      <span id="vippill" class="pill vip hidden">VIP</span>
+      <a class="btn small ghost" href="/profile.html">Профиль</a>
+      <button id="logout" class="btn small ghost" type="button">Выйти</button>
+    </div>
+  </header>
+
+  <main>
+    <a class="backlink" href="/">← В клуб</a>
+
+    <section class="card">
+      <div class="profilehead">
+        <div id="profileAvatar" class="avatar-big">🙂</div>
+        <div>
+          <h2 id="profileLogin"></h2>
+          <p class="muted" id="profileMeta"></p>
+          <p class="bio" id="profileBio"></p>
+        </div>
+      </div>
+
+      <h3>Аватарка</h3>
+      <form id="avatarform" class="avatarform">
+        <input type="file" id="avatarfile" accept="image/png,image/jpeg,image/gif,image/webp">
+        <button class="btn primary" type="submit" id="avatarupload">Загрузить</button>
+      </form>
+      <div id="avatarmsg" class="msg"></div>
+
+      <h3>Описание</h3>
+      <textarea id="bio" maxlength="500" rows="3"></textarea>
+      <button id="biosave" class="btn primary" type="button">Сохранить</button>
+      <div id="biomsg" class="msg"></div>
+    </section>
+
+    <section class="card">
+      <h2>Мои заказы</h2>
+      <div id="orders" class="orders"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Bonus Club © 2026</span>
+  </footer>
+
+  <script src="/profile.js"></script>
+</body>
+</html>

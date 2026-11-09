@@ -1,0 +1,27 @@
+services:
+  challenge:
+    build:
+      context: .
+      target: web
+    platform: linux/amd64  # эксплойт рассчитан на x86-64 layout арены ВМ
+    depends_on:
+      - vm
+    ports:
+      - "127.0.0.1:${PORT:-13444}:5000"
+    volumes:
+      - fastcalc_state:/var/lib/fastcalc
+      - fastcalc_socket:/run/fastcalc
+
+  vm:
+    build:
+      context: .
+      target: vm
+    platform: linux/amd64
+    environment:
+      CTF_FLAG: ${CTF_FLAG:?Set CTF_FLAG before starting}
+    volumes:
+      - fastcalc_socket:/run/fastcalc
+
+volumes:
+  fastcalc_state:
+  fastcalc_socket:

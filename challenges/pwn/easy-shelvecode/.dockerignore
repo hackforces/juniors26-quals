@@ -1,0 +1,7 @@
+.git
+__pycache__
+*.pyc
+solve.py
+README.md
+WALKTHROUGH.md
+docker-compose.yml

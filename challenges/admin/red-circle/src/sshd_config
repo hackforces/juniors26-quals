@@ -1,0 +1,31 @@
+Port 22
+PasswordAuthentication yes
+KbdInteractiveAuthentication no
+PermitRootLogin no
+AllowTcpForwarding no
+AllowAgentForwarding no
+X11Forwarding no
+UsePAM yes
+UseDNS no
+PrintMotd yes
+MaxSessions 50
+MaxStartups 100:30:300
+LoginGraceTime 60
+# Fixed UTF-8 locale: the image generates no locales, so a client-passed
+# LANG (e.g. ru_RU.UTF-8) silently fails setlocale() and Cyrillic READMEs
+# look "binary" to less. C.UTF-8 is built into debian and renders UTF-8.
+# NOTE: SetEnv inside a Match block REPLACES the global SetEnv list, so the
+# locale vars are repeated in every Match block.
+SetEnv LANG=C.UTF-8 LC_ALL=C.UTF-8 SHELL=/bin/bash
+
+# Per-user PATH keeps ssh-remote-command sessions exactly as locked as
+# interactive ones: without these blocks `ssh levelN@host 'bash'` would
+# find an unrestricted shell in the default PATH.
+Match User level1
+    SetEnv PATH=/home/level1/bin LANG=C.UTF-8 LC_ALL=C.UTF-8 SHELL=/bin/bash
+Match User level2
+    SetEnv PATH=/home/level2/bin LANG=C.UTF-8 LC_ALL=C.UTF-8 SHELL=/bin/bash
+Match User level3
+    SetEnv PATH=/home/level3/bin LANG=C.UTF-8 LC_ALL=C.UTF-8 SHELL=/bin/bash
+Match User level4
+    SetEnv PATH=/home/level4/bin LANG=C.UTF-8 LC_ALL=C.UTF-8 SHELL=/bin/bash

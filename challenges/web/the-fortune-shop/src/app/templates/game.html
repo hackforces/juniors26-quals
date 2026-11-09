@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+  <h1 class="h3 mb-0">Раунд</h1>
+  <div class="text-secondary small">
+    Отвечено <span id="count" class="badge text-bg-secondary">0</span>/{{ num_questions }}
+  </div>
+</div>
+
+<div id="msg"></div>
+
+<div class="d-flex gap-2 mb-3">
+  <button id="new-game" class="btn btn-primary">Новая игра</button>
+  <button id="submit" class="btn btn-success" disabled>Проверить</button>
+</div>
+
+<p class="text-secondary small mb-3" id="seed-line"></p>
+
+<div id="questions" class="vstack gap-3"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/game.js"></script>
+{% endblock %}

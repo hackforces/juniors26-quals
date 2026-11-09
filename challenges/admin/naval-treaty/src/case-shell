@@ -1,0 +1,23 @@
+#!/bin/sh
+set -eu
+[ "$#" -eq 0 ] || { echo "interactive archive terminal only"; exit 1; }
+echo "Treaty maintenance terminal. Type help."
+while printf 'treaty> '; IFS= read -r line; do
+  set -- $line
+  case "${1:-}" in
+    help) echo "available: help, ports, unit, journal, read <path>, extract <pass>, connect, exit" ;;
+    ports) /usr/bin/ss -lnt ;;
+    unit) /bin/cat /etc/systemd/system/treaty-archive.service ;;
+    journal) /bin/cat /var/log/treaty/journal.log ;;
+    read)
+      case "${2:-}" in /etc/machine-id|/etc/treaty/slot|/usr/local/bin/derive-pass.sh) /bin/cat "$2";; *) echo "that record is unavailable";; esac ;;
+    extract)
+      [ "$#" -eq 2 ] || { echo "usage: extract <pass>"; continue; }
+      if openssl pkcs12 -in /var/backups/treaty-client.p12 -passin "pass:$2" -nodes -out /tmp/treaty-client.pem >/dev/null 2>&1; then chmod 0600 /tmp/treaty-client.pem; echo "client seal restored"; else rm -f /tmp/treaty-client.pem; echo "seal rejected"; fi ;;
+    connect)
+      [ -r /tmp/treaty-client.pem ] && python3 /usr/local/lib/client.py || echo "restore a client seal first" ;;
+    exit) exit 0 ;;
+    '') ;;
+    *) echo "command not available" ;;
+  esac
+done

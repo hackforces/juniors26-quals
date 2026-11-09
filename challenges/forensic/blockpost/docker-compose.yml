@@ -1,0 +1,8 @@
+services:
+  challenge:
+    build: .
+    environment:
+      CTF_FLAG: ${CTF_FLAG:?Set CTF_FLAG before starting}
+      HARD: ${HARD:-}   # усложнения генератора, напр. "--axis z --lossy"
+    ports:
+      - "127.0.0.1:${PORT:-13400}:8089"   # GET / -> blockpost.zip (challenge.pcap + latest.log)

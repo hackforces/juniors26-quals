@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+[ "$#" -eq 0 ] || { echo "interactive dispatch only"; exit 1; }
+echo "Copper Beeches dispatch terminal. Type help."
+while printf 'dispatch> '; IFS= read -r line; do
+  set -- $line
+  case "${1:-}" in
+    help) echo "available: help, read /etc/copper/token, listen <port>, courier <port>, exit" ;;
+    read) [ "${2:-}" = /etc/copper/token ] && [ "$#" -eq 2 ] && /bin/cat /etc/copper/token || echo "that record is unavailable" ;;
+    listen)
+      case "${2:-}" in *[!0-9]*|'') echo "numeric port required";; *) /bin/nc -l -s 127.0.0.1 -p "$2";; esac ;;
+    courier)
+      [ "$#" -eq 2 ] && /usr/local/bin/courier "$2" || echo "usage: courier <port>" ;;
+    exit) exit 0 ;;
+    '') ;;
+    *) echo "command not available" ;;
+  esac
+done

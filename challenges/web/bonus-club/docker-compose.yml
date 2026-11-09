@@ -1,0 +1,10 @@
+services:
+  challenge:
+    build: .
+    environment:
+      CTF_FLAG: ${CTF_FLAG:?Set CTF_FLAG before starting}
+      # SESSION_SECRET: ${SESSION_SECRET:-} — по умолчанию случайный на старт
+      DB_PATH: /app/data/club.db
+      PORT: 8090
+    ports:
+      - "127.0.0.1:${PORT:-13405}:8090"

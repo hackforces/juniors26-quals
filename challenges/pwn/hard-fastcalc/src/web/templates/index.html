@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FastCalc</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="FastCalc">
+        <span class="brand-mark" aria-hidden="true">L</span>
+        <span>FastCalc</span>
+      </a>
+      <span class="header-section">Калькулятор</span>
+    </header>
+
+    <main>
+      <section id="login-card" class="panel login-panel">
+        <h1>Вход</h1>
+        <p class="muted">Выберите режим работы с устройством.</p>
+
+        <button id="guest-login" class="button button-secondary" type="button">
+          Продолжить как гость
+        </button>
+
+        <div class="separator"><span>или</span></div>
+
+        <form id="admin-login" class="stack">
+          <label class="field">
+            <span>Пароль администратора</span>
+            <input id="admin-password" type="password"
+                   autocomplete="current-password" placeholder="Пароль">
+          </label>
+          <button class="button button-primary" type="submit">
+            Войти
+          </button>
+        </form>
+        <p id="login-error" class="message" aria-live="polite"></p>
+      </section>
+
+      <section id="calculator-card" class="panel calculator-panel is-hidden">
+        <div class="card-header">
+          <div>
+            <h1>Калькулятор</h1>
+            <p class="muted">Введите два числа и выберите операцию.</p>
+          </div>
+          <div class="account">
+            <span id="account-label"></span>
+            <button id="admin-open" class="link-button is-hidden" type="button">
+              Администрирование
+            </button>
+            <button id="logout" class="link-button" type="button">Выйти</button>
+          </div>
+        </div>
+
+        <form id="calculator" class="stack">
+          <div class="number-grid">
+            <label class="field">
+              <span>Первое число</span>
+              <input id="a" name="a" type="text" inputmode="numeric"
+                     value="7" placeholder="например, 1011"
+                     autocomplete="off" required>
+            </label>
+            <label class="field">
+              <span>Второе число</span>
+              <input id="b" name="b" type="text" inputmode="numeric"
+                     value="5" placeholder="например, 1011"
+                     autocomplete="off" required>
+            </label>
+          </div>
+
+          <div class="options-grid">
+            <label class="field">
+              <span>Операция</span>
+              <select id="op" name="op">
+                <option value="+">Сложение (+)</option>
+                <option value="-">Вычитание (−)</option>
+                <option value="*">Умножение (×)</option>
+                <option value="/">Деление (÷)</option>
+                <option value="%">Остаток (%)</option>
+                <option value="|">Побитовое ИЛИ (|)</option>
+                <option value="&">Побитовое И (&amp;)</option>
+                <option value="^">Побитовый XOR (^)</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Система ввода</span>
+              <select id="input_base" name="input_base">
+                <option value="10">Десятичная</option>
+                <option value="2">Двоичная</option>
+                <option value="8">Восьмеричная</option>
+                <option value="16">Шестнадцатеричная</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Система результата</span>
+              <select id="output_base" name="output_base">
+                <option value="10">Десятичная</option>
+                <option value="2">Двоичная</option>
+                <option value="8">Восьмеричная</option>
+                <option value="16">Шестнадцатеричная</option>
+              </select>
+            </label>
+          </div>
+
+          <button class="button button-primary" type="submit">Посчитать</button>
+        </form>
+
+        <div class="result" aria-live="polite">
+          <span class="result-label">Результат</span>
+          <output id="result-value">—</output>
+        </div>
+        <p class="hint">Целые числа от −2³¹ до 2³¹−1.</p>
+
+        <section id="admin-panel" class="admin-panel is-hidden" aria-labelledby="admin-title">
+          <div class="admin-header">
+            <div>
+              <h2 id="admin-title">Администрирование</h2>
+              <p class="muted">Управление образом прошивки устройства.</p>
+            </div>
+            <button id="admin-close" class="link-button" type="button">Закрыть</button>
+          </div>
+
+          <div class="admin-actions">
+            <a class="button button-secondary" href="/api/firmware"
+               download="firmware.bin">Скачать прошивку</a>
+
+            <label class="file-button button button-secondary" for="firmware-file">
+              Выбрать файл прошивки
+            </label>
+            <input id="firmware-file" class="file-input" type="file"
+                   accept=".bin,application/octet-stream">
+            <span id="firmware-name" class="file-name">Файл не выбран</span>
+
+            <button id="upload-firmware" class="button button-primary" type="button">
+              Загрузить файл
+            </button>
+            <button id="reset-firmware" class="button button-danger" type="button">
+              Сбросить до заводской
+            </button>
+          </div>
+          <p id="admin-message" class="message" aria-live="polite"></p>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">FastCalc</footer>
+  </div>
+
+  <script>
+    const loginCard = document.querySelector("#login-card");
+    const calculatorCard = document.querySelector("#calculator-card");
+    const loginError = document.querySelector("#login-error");
+    const accountLabel = document.querySelector("#account-label");
+    const adminOpen = document.querySelector("#admin-open");
+    const adminPanel = document.querySelector("#admin-panel");
+    const adminMessage = document.querySelector("#admin-message");
+    const firmwareFile = document.querySelector("#firmware-file");
+    const firmwareName = document.querySelector("#firmware-name");
+    const result = document.querySelector("#result-value");
+    const first = document.querySelector("#a");
+    const second = document.querySelector("#b");
+    const inputBase = document.querySelector("#input_base");
+    const examples = {
+      "2": "например, 1011",
+      "8": "например, 173",
+      "10": "например, 123",
+      "16": "например, 7b"
+    };
+
+    function refreshPlaceholder() {
+      first.placeholder = examples[inputBase.value];
+      second.placeholder = examples[inputBase.value];
+    }
+
+    function showCalculator(data) {
+      loginCard.classList.add("is-hidden");
+      calculatorCard.classList.remove("is-hidden");
+      const isAdmin = data.role === "admin";
+      accountLabel.textContent = isAdmin ? "Администратор" : "Гость";
+      adminOpen.classList.toggle("is-hidden", !isAdmin);
+      if (!isAdmin) adminPanel.classList.add("is-hidden");
+    }
+
+    function showLogin(message = "") {
+      calculatorCard.classList.add("is-hidden");
+      loginCard.classList.remove("is-hidden");
+      adminOpen.classList.add("is-hidden");
+      adminPanel.classList.add("is-hidden");
+      loginError.textContent = message;
+    }
+
+    async function login(username, password) {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({username, password})
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error || "Не удалось войти");
+      showCalculator(data);
+    }
+
+    document.querySelector("#guest-login").addEventListener("click", async () => {
+      loginError.textContent = "";
+      try {
+        await login("guest", "");
+      } catch (error) {
+        loginError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#admin-login").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      loginError.textContent = "";
+      try {
+        await login("admin", document.querySelector("#admin-password").value);
+      } catch (error) {
+        loginError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#logout").addEventListener("click", async () => {
+      await fetch("/api/logout", {method: "POST", credentials: "same-origin"});
+      showLogin();
+    });
+
+    adminOpen.addEventListener("click", () => {
+      adminPanel.classList.remove("is-hidden");
+      adminMessage.textContent = "";
+    });
+
+    document.querySelector("#admin-close").addEventListener("click", () => {
+      adminPanel.classList.add("is-hidden");
+    });
+
+    firmwareFile.addEventListener("change", () => {
+      firmwareName.textContent = firmwareFile.files[0]?.name || "Файл не выбран";
+    });
+
+    document.querySelector("#upload-firmware").addEventListener("click", async () => {
+      const file = firmwareFile.files[0];
+      adminMessage.textContent = "";
+      if (!file) {
+        adminMessage.textContent = "Выберите файл .bin";
+        return;
+      }
+      if (file.size > 1572) {
+        adminMessage.textContent = "Файл превышает допустимый размер";
+        return;
+      }
+      try {
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          headers: {"Content-Type": "application/octet-stream"},
+          credentials: "same-origin",
+          body: await file.arrayBuffer()
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || "Не удалось загрузить прошивку");
+        adminMessage.dataset.state = "ok";
+        adminMessage.textContent = "Прошивка загружена: " + data.bytes + " байт";
+        firmwareFile.value = "";
+        firmwareName.textContent = "Файл не выбран";
+      } catch (error) {
+        adminMessage.dataset.state = "error";
+        adminMessage.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#reset-firmware").addEventListener("click", async () => {
+      if (!window.confirm("Вернуть заводскую прошивку?")) return;
+      adminMessage.textContent = "";
+      try {
+        const response = await fetch("/api/reset", {
+          method: "POST",
+          credentials: "same-origin"
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || "Не удалось выполнить сброс");
+        adminMessage.dataset.state = "ok";
+        adminMessage.textContent = "Заводская прошивка восстановлена";
+      } catch (error) {
+        adminMessage.dataset.state = "error";
+        adminMessage.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#calculator").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      result.dataset.state = "working";
+      result.textContent = "Считаем…";
+
+      const body = {
+        a: first.value,
+        b: second.value,
+        op: document.querySelector("#op").value,
+        input_base: Number(inputBase.value),
+        output_base: Number(document.querySelector("#output_base").value)
+      };
+
+      try {
+        const response = await fetch("/api/calculate", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(body)
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || "Не удалось выполнить расчёт");
+        }
+        result.dataset.state = "ok";
+        result.textContent = data.value;
+      } catch (error) {
+        result.dataset.state = "error";
+        result.textContent = error.message;
+      }
+    });
+
+    inputBase.addEventListener("change", refreshPlaceholder);
+    refreshPlaceholder();
+
+    fetch("/api/me")
+      .then(response => response.ok ? response.json() : Promise.reject())
+      .then(showCalculator)
+      .catch(() => showLogin());
+  </script>
+</body>
+</html>

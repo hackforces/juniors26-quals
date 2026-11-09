@@ -1,0 +1,8 @@
+services:
+  challenge:
+    build: .
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////app/data/app.db
+      CTF_FLAG: ${CTF_FLAG:?Set CTF_FLAG before starting}
+    ports:
+      - "127.0.0.1:${PORT:-13438}:8080"

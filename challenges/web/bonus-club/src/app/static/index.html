@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bonus Club — сервис лояльности</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f1216'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23f6b942' font-family='Arial' font-weight='bold'%3EB%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Bonus<span>Club</span></div>
+    <div id="userbox" class="userbox hidden">
+      <button id="avatarBadge" class="avatar-badge" type="button" title="Профиль">🙂</button>
+      <span id="who" class="who"></span>
+      <span id="balance" class="pill">— pt</span>
+      <span id="vippill" class="pill vip hidden">VIP</span>
+      <a class="btn small ghost" href="/profile.html">Профиль</a>
+      <button id="logout" class="btn small ghost" type="button">Выйти</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="auth" class="authwrap hidden">
+      <div class="card authcard">
+        <div class="tabs" role="tablist">
+          <button id="tab-login" class="tab active" type="button">Вход</button>
+          <button id="tab-reg" class="tab" type="button">Регистрация</button>
+        </div>
+        <form id="authform" autocomplete="off" novalidate>
+          <label for="login">Логин</label>
+          <input id="login" name="login" autocomplete="username">
+          <label for="password">Пароль</label>
+          <input id="password" name="password" type="password" autocomplete="current-password">
+          <button id="authsubmit" class="btn primary wide" type="submit">Войти</button>
+        </form>
+        <div id="authmsg" class="msg"></div>
+      </div>
+    </section>
+
+    <section id="club" class="hidden">
+      <section id="bonuscard" class="card bonuscard hidden">
+        <div class="coin">+100</div>
+        <div class="bonusinfo">
+          <h2>Welcome-бонус</h2>
+          <p class="muted">Подарок для новых участников клуба.</p>
+          <button id="getbonus" class="btn primary" type="button">Забрать бонус</button>
+          <div id="bonusmsg" class="msg"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Клубный магазин</h2>
+        <div id="shop" class="shop"></div>
+      </section>
+
+      <section id="vipzone" class="card vipcard hidden">
+        <div class="cardhead">
+          <h2>Клубная поддержка</h2>
+          <span class="pill vip">VIP</span>
+        </div>
+        <p class="muted">Письмо уходит напрямую в поддержку клуба. Ответ — в течение 48 часов.</p>
+        <form id="ticketform" class="ticketform" autocomplete="off">
+          <label for="tsubject">Тема</label>
+          <input id="tsubject" maxlength="120">
+          <label for="tmessage">Сообщение</label>
+          <textarea id="tmessage" maxlength="2000" rows="4"></textarea>
+          <button id="ticketsubmit" class="btn primary" type="submit">Отправить письмо</button>
+        </form>
+        <div id="ticketmsg" class="msg"></div>
+        <h3>Исходящие письма</h3>
+        <div id="tickets" class="tickets"></div>
+      </section>
+
+      <section class="card">
+        <h2>Мои заказы</h2>
+        <div id="orders" class="orders"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <span>Bonus Club © 2026</span>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

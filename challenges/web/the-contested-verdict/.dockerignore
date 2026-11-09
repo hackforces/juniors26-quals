@@ -1,0 +1,8 @@
+author/
+README.md
+challenge.yml
+docker-compose.yml
+.env
+.dockerignore
+__pycache__/
+*.py[cod]
